@@ -1,10 +1,11 @@
 import random
+import config
 
 
 def calc_fitness(g, cromossomo):
     fitness = 0
     for caminho in cromossomo:
-        fitness = 1 / calc_cost(g, caminho)
+        fitness = fitness + (1 / calc_cost(g, caminho))
     return fitness
 
 

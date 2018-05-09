@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import networkx as nx
 import matplotlib.pyplot as plt
 import pprint
@@ -100,5 +102,6 @@ for i in range(1):
                     founds.append([val1, val2, val3])
     print(founds)
 
+#import os
 
-
+#os.environ['PYTHONINSPECT'] = 'True'
