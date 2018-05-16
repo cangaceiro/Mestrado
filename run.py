@@ -46,10 +46,10 @@ for i in range(1):
     print('ESCOLHA')
     print(result)
     print('MUTAÇÃO')
-    Mutation.mutation(g, result[1])
+    chromosome = Mutation.mutation(g, result[1])
     print('----------------------------------')
     print("POPULAR DEMANDA")
-    demand_generator.populate_demand(g, result[1], [d[2] for d in demanda])
+    demand_generator.populate_demand(g, chromosome, [d[2] for d in demanda])
     paths = []
     for edge in g.edges:
         print(edge[0], edge[1], g[edge[0]][edge[1]]['LinkSpeedUsed'])
