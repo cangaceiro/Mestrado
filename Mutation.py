@@ -48,8 +48,8 @@ def mutation(g, chromosome):
             print(alternative_path_cost)
             if alternative_path <= original_path:
                 mutations.append((original_path, alternative_path))
-    print("Mutações")
-    print(mutations)
+            print("Mutações")
+            print(mutations)
     for m in mutations:
         original_path = m[0]
         alternative_path = m[1]

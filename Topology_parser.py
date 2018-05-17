@@ -69,7 +69,7 @@ for i in range(1):
     print('ESCOLHA')
     print(result)
     print('----------------------------------')
-    rotas_escolhidas = []
+    '''rotas_escolhidas = []
     for i in result[1]:
         rotas_escolhidas.append([i[0], i[-1]])
     print("ORIGEM E DESTINO DE CADA ESCOLHA:", rotas_escolhidas)
@@ -78,7 +78,7 @@ for i in range(1):
     for j in rotas_escolhidas:
         rotas_possiveis_da_escolha.append(([j[0], j[-1], [p for p in nx.all_shortest_paths(g, j[0], j[-1])]]))
     print("ROTAS POSSIVEIS PARA CADA ESCOLHA:", rotas_possiveis_da_escolha)
-    print('----------------------------------')
+    print('----------------------------------')'''
     print("POPULAR DEMANDA")
     demand_generator.populate_demand(g, result[1], [d[2] for d in demanda])
     paths = []
@@ -87,7 +87,7 @@ for i in range(1):
         paths.append([edge[0], edge[1], g[edge[0]][edge[1]]['LinkSpeedUsed']])
     print('-------------Mutacao---------------------')
     print(Mutation.mutation(g, paths))
-    print('----------------------------------')
+    print('############################################ OUTRO PATH ##################################################################')
     '''c = []
     print("OCUPACÃO DOS LINKS")
     for j in range(len(result[1])):
