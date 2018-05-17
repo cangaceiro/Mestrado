@@ -7,6 +7,7 @@ import demand_generator # Funcao que criei para demanda
 import itertools
 import fitness
 import roulletweel_selection
+import Mutation
 from random import randint
 
 
@@ -84,8 +85,10 @@ for i in range(1):
     for edge in g.edges:
         print(edge[0], edge[1], g[edge[0]][edge[1]]['LinkSpeedUsed'])
         paths.append([edge[0], edge[1], g[edge[0]][edge[1]]['LinkSpeedUsed']])
+    print('-------------Mutacao---------------------')
+    print(Mutation.mutation(g, paths))
     print('----------------------------------')
-    c = []
+    '''c = []
     print("OCUPACÃO DOS LINKS")
     for j in range(len(result[1])):
         b = [(v, result[1][j][i + 1]) for i, v in enumerate(result[1][j]) if (i + 1) < len(result[1][j])]
@@ -100,7 +103,7 @@ for i in range(1):
             else:
                 if ((val2, val1) in c[i]):
                     founds.append([val1, val2, val3])
-    print(founds)
+    print(founds)'''
 
 #import os
 

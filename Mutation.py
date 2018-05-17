@@ -4,7 +4,6 @@ import config
 
 from fitness import calc_fitness, calc_cost
 
-
 def mutation(g, chromosome):
     indexes = []
     index_quantity = max(len(chromosome) * config.MUTATION_TAX, 1)
@@ -31,10 +30,13 @@ def mutation(g, chromosome):
         target = gene[-1]
         paths = nx.all_shortest_paths(g, mutation_node, target)
         alternative_path = None
-        for path in paths:
-            if path != original_path:
-                alternative_path = path
-                break
+        try:
+            for path in paths:
+                if path != original_path:
+                    alternative_path = path
+                    break
+        except nx.NetworkXNoPath:
+            pass
         if alternative_path is None:
             print("Não existe outro caminho para este GENE")
         else:
