@@ -4,10 +4,7 @@ import config
 from fitness import calc_fitness, calc_cost
 
 def influence_function(g, paths):
-    founds = []
-    for val1, val2, val3 in paths:
-        founds.append([val1, val2, val3])
-    new_path = sorted(founds, key=lambda x: (x[2]), reverse=True)
+    new_path = sorted(paths, key=lambda x: (x[2]), reverse=True)
     new_route = []
     alternative_route = [p for p in nx.all_shortest_paths(g, new_path[0][0], new_path[0][1])]
     if len(alternative_route) > 1:
