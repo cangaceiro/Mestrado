@@ -8,6 +8,7 @@ import itertools
 import fitness
 import roulletweel_selection
 import Mutation
+import influence_function
 from random import randint
 
 
@@ -87,23 +88,14 @@ for i in range(1):
         paths.append([edge[0], edge[1], g[edge[0]][edge[1]]['LinkSpeedUsed']])
     print('-------------Mutacao---------------------')
     print(Mutation.mutation(g, paths))
+    print('-------------Funcao de Influência---------------------')
+    print(influence_function.influence_function(g, paths))
     print('############################################ OUTRO PATH ##################################################################')
     '''c = []
     print("OCUPACÃO DOS LINKS")
     for j in range(len(result[1])):
         b = [(v, result[1][j][i + 1]) for i, v in enumerate(result[1][j]) if (i + 1) < len(result[1][j])]
-        c.append(b)
-    founds = []
-    print(c)
-    print(paths)
-    for val1, val2, val3 in paths:
-        for i in range(len(c)):
-            if ((val1, val2) in c[i]): #creditos de Thyago
-                founds.append([val1, val2, val3])
-            else:
-                if ((val2, val1) in c[i]):
-                    founds.append([val1, val2, val3])
-    print(founds)'''
+        c.append(b)'''
 
 #import os
 

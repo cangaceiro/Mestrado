@@ -39,6 +39,7 @@ def mutation(g, chromosome):
             pass
         if alternative_path is None:
             print("Não existe outro caminho para este GENE")
+            print("------")
         else:
             original_path_cost = calc_cost(g, original_path)
             alternative_path_cost = calc_cost(g, alternative_path)
