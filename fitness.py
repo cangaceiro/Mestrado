@@ -16,6 +16,6 @@ def calc_cost(g, caminho):
         link_speed_used = g[current][caminho[i]]['LinkSpeedUsed']
         link_speed = float(g[current][caminho[i]]['LinkSpeed'])
         information = g[current][caminho[i]]['Information']
-        cost = cost + (information + (link_speed_used / link_speed))
+        cost = cost + (0.0000001 + (link_speed_used / link_speed))
         current = caminho[i]
     return cost

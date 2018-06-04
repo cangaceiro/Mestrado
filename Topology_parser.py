@@ -9,8 +9,9 @@ import fitness
 import roulletweel_selection
 import Mutation
 import influence_function
+import pandas as pd
 from random import randint
-
+import pymysql
 
 g=nx.read_gml('Geant2012.gml')
 
@@ -86,17 +87,67 @@ for i in range(1):
     for edge in g.edges:
         print(edge[0], edge[1], g[edge[0]][edge[1]]['LinkSpeedUsed'])
         paths.append([edge[0], edge[1], g[edge[0]][edge[1]]['LinkSpeedUsed']])
-    print('-------------Mutacao---------------------')
-    print(Mutation.mutation(g, paths))
-    print('-------------Funcao de Influência---------------------')
-    print(influence_function.influence_function(g, paths))
+    #========Plotagem sem algoritmo Cultural========
+    valores_ocupacao_sem_cultural = []
+    for i in paths:
+        valores_ocupacao_sem_cultural.append(i[2])
+    valores_sem_cultural = pd.Series(valores_ocupacao_sem_cultural)
+    media_sem_cultural = valores_sem_cultural.mean()
+    #####Salvado no banco de dados para gerar media############
+    base_de_dados = pymysql.connect("localhost", "root", "123456", "base_de_dados_mestrado_thyago")
+    cursor = base_de_dados.cursor()
+    cursor_1 = base_de_dados.cursor()
+    cursor.execute("INSERT INTO media_ocupacao_sem_cultural VALUES (NULL, %s)", ((str(media_sem_cultural))))
+    cursor_1.execute("SELECT media FROM media_ocupacao_sem_cultural")
+    valores_plotagem_sem_cultural = []
+    for i in list(cursor_1):
+        for j in i:
+            valores_plotagem_sem_cultural.append(j)
+    ocupacao_media_temp = map(float, valores_plotagem_sem_cultural)
+    ocupacao_media_temp_1 = [k * 10 for k in ocupacao_media_temp]
+    ocupacao_media = ocupacao_media_temp_1
+    base_de_dados.commit()
+    base_de_dados.close()
+    ###########################################
+    plt.boxplot(ocupacao_media)
+    plt.title('Ocupação Média utilizando Dijkstra')
+    plt.ylabel('Valores em Gbps')
+    plt.xticks([1], ['Ocupacao média da rede'])
+    plt.show()
+    plt.close()
+
+    #===============================================
+    print('-------------PLOTAGEM COM CULTURAL---------------------')
+    #print(Mutation.mutation(g, influence_function.influence_function(paths)))
+    valores_ocupacao = []
+    media = []
+    for i in Mutation.mutation(g, influence_function.influence_function(paths)):
+        valores_ocupacao.append(i[2])
+    valores = pd.Series(valores_ocupacao)
+    media = valores.mean()
+    #####Salvado no banco de dados para gerar media############
+    base_de_dados = pymysql.connect("localhost", "root", "123456", "base_de_dados_mestrado_thyago")
+    cursor = base_de_dados.cursor()
+    cursor_1 = base_de_dados.cursor()
+    cursor.execute("INSERT INTO media_ocupacao VALUES (NULL, %s)", ((str(media))))
+    cursor_1.execute("SELECT media FROM media_ocupacao")
+    valores_plotagem = []
+    for i in list(cursor_1):
+        for j in i:
+            valores_plotagem.append(j)
+    ocupacao_media_temp = map(float, valores_plotagem)
+    ocupacao_media_temp_1 = [k*10 for k in ocupacao_media_temp]
+    ocupacao_media = ocupacao_media_temp_1
+    base_de_dados.commit()
+    base_de_dados.close()
+    ###########################################
+    plt.boxplot(ocupacao_media)
+    plt.title('Ocupação Média utilizando Algoritmo Cultural')
+    plt.ylabel('Valores em Gbps')
+    plt.xticks([1], ['Ocupacao média da rede'])
+    plt.show()
+    plt.close()
     print('############################################ OUTRO PATH ##################################################################')
-    '''c = []
-    print("OCUPACÃO DOS LINKS")
-    for j in range(len(result[1])):
-        b = [(v, result[1][j][i + 1]) for i, v in enumerate(result[1][j]) if (i + 1) < len(result[1][j])]
-        c.append(b)'''
 
 #import os
-
 #os.environ['PYTHONINSPECT'] = 'True'

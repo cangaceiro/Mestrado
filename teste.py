@@ -1,10 +1,5 @@
-a = [('SE', 'FI'), ('DK', 'SE')]
-b = [['NL', 'DK', 0], ['NL', 'DE', 0], ['NL', 'BE', 10], ['SE', 'DK', 0], ['FI', 'SE', 0.054]]
-founds = []
-for val1, val2, val3 in b:
-    if((val1, val2) in a):
-        founds.append([val1, val2, val3])
-    else:
-        if ((val2, val1) in a):
-            founds.append([val1, val2, val3])
-print(founds)
+import numpy as np
+from random import choice
+choices = [[0, 1, 2, 3], [10, 11, 12, 13],[20, 21, 22, 23], [30, 31, 32, 33]]
+
+print(choice(choices))
