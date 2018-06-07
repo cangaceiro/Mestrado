@@ -8,7 +8,7 @@ def roullet_wheel(cromossomos):
     total_fitness = sum([c[0] for c in cromossomos])
     roleta = random.random() * total_fitness
     for c in cromossomos:
-        if c[0]> roleta:
+        if c[0] > roleta:
             return c
         else:
-            roleta=roleta - c[0]
+            roleta = roleta - c[0]
