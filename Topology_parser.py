@@ -14,6 +14,10 @@ from random import randint
 import config
 import dataset
 
+MUTATION_TAX = 0.1
+
+global MUTATION_TAX
+
 g = nx.read_gml('Geant2012.gml')
 
 g2 = nx.read_gml('Geant2012.gml')
@@ -78,7 +82,6 @@ for i in range(config.CYCLES):
     media_sem_cultural_table = db['media_ocupacao_sem_cultural']
     media_sem_cultural_table.insert({'media': media_sem_cultural})
     db.commit()
-
 
 ocupacao_media = [i['media'] for i in db['media_ocupacao_sem_cultural'].all()]
 # ocupacao_media_cultural = [i['media'] for i in db['media_ocupacao'].all()]
