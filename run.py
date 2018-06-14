@@ -23,7 +23,6 @@ for i in g.nodes:
 
 for edge in g.edges:
     g[edge[0]][edge[1]]['LinkSpeedUsed'] = 0
-    g[edge[0]][edge[1]]['Information'] = 0.1
 
 for i in range(1):
     demanda = demand_generator.generator(list(g.nodes))

@@ -11,17 +11,16 @@ import Mutation
 import influence_function
 import pandas as pd
 from random import randint
-import config
+from config import *
 import dataset
 import utils
 
-MUTATION_TAX = 0.1
 
-global MUTATION_TAX
+g = nx.read_gml('Geant2012.gml') # cultural
 
-g = nx.read_gml('Geant2012.gml')
+g2 = nx.read_gml('Geant2012.gml') # dijkstra
 
-g2 = nx.read_gml('Geant2012.gml')
+g3 = nx.read_gml('Geant2012.gml') # genético
 
 dijkstra_distances = {node: {} for node in g.nodes}
 
@@ -33,16 +32,18 @@ for i in g.nodes:
 
 for edge in g.edges:
     g[edge[0]][edge[1]]['LinkSpeedUsed'] = 0
-    g[edge[0]][edge[1]]['Information'] = 0.1
 
 for edge in g2.edges:
     g2[edge[0]][edge[1]]['LinkSpeedUsed'] = 0
-    g2[edge[0]][edge[1]]['Information'] = 0.1
+
+for edge in g3.edges:
+    g3[edge[0]][edge[1]]['LinkSpeedUsed'] = 0
 
 ocupacao_media = []
 ocupacao_media_lib = []
+ocupacao_media_genetico = []
 
-for i in range(config.CYCLES):
+for i in range(CYCLES):
     demanda = demand_generator.generator(list(g.nodes))
     print('DEMANDA')
     print(demanda)
@@ -63,26 +64,34 @@ for i in range(config.CYCLES):
 
     result = roulletweel_selection.roullet_wheel(fitness_cromossomos)
     print('ESCOLHA')
-    cromossomo = Mutation.mutation(g, result[1])
+    cromossomo_cultural = Mutation.mutation(g, result[1])
+    cromossomo_genetico = Mutation.mutation(g, result[1], mutation_fixed=0.1)
     print('----------------------------------')
     print("POPULAR DEMANDA")
-    demand_generator.populate_demand(g, cromossomo, [d[2] for d in demanda])
+    demand_generator.populate_demand(g, cromossomo_cultural, [d[2] for d in demanda])
     demand_generator.populate_demand(g2, caminhos_dijkstra, [d[2] for d in demanda])
-    
+    demand_generator.populate_demand(g3, cromossomo_genetico, [d[2] for d in demanda])
+
+    if i >= 1:
+        influence_function.influence_function(g, ocupacao_media[-1])
+
     ocupacao_media.append(utils.topology_std_desviation(g))
     ocupacao_media_lib.append(utils.topology_std_desviation(g2))
+    ocupacao_media_genetico.append(utils.topology_std_desviation(g3))
+
+print("------------- GRÁFICO ------------------")
 
 fig = plt.figure(1, figsize=(9, 6))
 
 ax = fig.add_subplot(111)
 
-bp = ax.boxplot([ocupacao_media, ocupacao_media_lib])
+bp = ax.boxplot([ocupacao_media, ocupacao_media_genetico, ocupacao_media_lib])
 
 plt.title('Ocupação Média')
 
-plt.ylabel('Valores em Gbps')
+plt.ylabel('Desvio Padrão da Ocupação')
 
-ax.set_xticklabels(['Ocupação Média Genética', 'Ocupação Média'])
+ax.set_xticklabels(['Ocupação Cultural', 'Ocupação Genética', 'Ocupação SPF'])
 
 plt.show()
 

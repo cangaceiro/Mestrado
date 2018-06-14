@@ -15,7 +15,6 @@ def calc_cost(g, caminho):
     for i in range(1, len(caminho)):
         link_speed_used = g[current][caminho[i]]['LinkSpeedUsed']
         link_speed = float(g[current][caminho[i]]['LinkSpeed'])
-        information = g[current][caminho[i]]['Information']
         usage = (link_speed_used / link_speed)
         if usage <= 0.3:
             usage = usage * 1

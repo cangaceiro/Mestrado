@@ -1,15 +1,18 @@
 import random
 import networkx as nx
-import config
 
+from config import *
 
 from fitness import calc_fitness, calc_cost
 
 
-def mutation(g, chromosome):
+def mutation(g, chromosome, mutation_fixed=None):
     chromosome = list(chromosome)
     indexes = []
-    index_quantity = max(len(chromosome) * MUTATION_TAX, 1)
+    if mutation_fixed is None:
+        index_quantity = max(len(chromosome) * MUTATION_TAX, 1)
+    else:
+        index_quantity = max(len(chromosome) * mutation_fixed, 1)
     while True:
         index = random.randint(0, len(chromosome) - 1)
         if not index in indexes:

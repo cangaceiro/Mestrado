@@ -2,13 +2,13 @@ import random
 
 def generator(nodes):
     demand=[]
-    Drange=random.randint(1,10)# gerar total de demandas
+    Drange=random.randint(5, 10)# gerar total de demandas
     for i in range(Drange):
         source=random.choice(nodes) #Definir o Source
         cp_nodes= list(nodes)# copiar a lista
         cp_nodes.remove(source)#Remover o source da copia da lista
         target=random.choice(cp_nodes)#escolher o target da lista sem o source
-        demand.append([source,target,random.randint(100, 200)/1000])# Gerar ocupação aleatoria e converter em GIGA
+        demand.append([source,target,random.randint(50, 150)/1000])# Gerar ocupação aleatoria e converter em GIGA
     return demand
 
 
