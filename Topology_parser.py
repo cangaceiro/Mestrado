@@ -13,6 +13,7 @@ import pandas as pd
 from random import randint
 import config
 import dataset
+import utils
 
 g = nx.read_gml('Geant2012.gml')
 
@@ -34,9 +35,9 @@ for edge in g2.edges:
     g2[edge[0]][edge[1]]['LinkSpeedUsed'] = 0
     g2[edge[0]][edge[1]]['Information'] = 0.1
 
-db = dataset.connect('sqlite:///db.sqlite3')
-db['media_ocupacao'].delete()
-db['media_ocupacao_sem_cultural'].delete()
+ocupacao_media = []
+ocupacao_media_lib = []
+
 for i in range(config.CYCLES):
     demanda = demand_generator.generator(list(g.nodes))
     print('DEMANDA')
@@ -63,30 +64,41 @@ for i in range(config.CYCLES):
     print("POPULAR DEMANDA")
     demand_generator.populate_demand(g, cromossomo, [d[2] for d in demanda])
     demand_generator.populate_demand(g2, caminhos_dijkstra, [d[2] for d in demanda])
-    #========Plotagem sem algoritmo Cultural========
-    valores_ocupacao_sem_cultural = []
-    paths = []
-    for edge in g.edges:
-        print(edge[0], edge[1], g[edge[0]][edge[1]]['LinkSpeedUsed'])
-        paths.append([edge[0], edge[1], g[edge[0]][edge[1]]['LinkSpeedUsed']])
-    for i in paths:
-        valores_ocupacao_sem_cultural.append(i[2])
-    valores_sem_cultural = pd.Series(valores_ocupacao_sem_cultural)
-    media_sem_cultural = valores_sem_cultural.mean()
-    #####Salvado no banco de dados para gerar media############
     
-    media_sem_cultural_table = db['media_ocupacao_sem_cultural']
-    media_sem_cultural_table.insert({'media': media_sem_cultural})
-    db.commit()
+    ocupacao_media.append(utils.topology_std_desviation(g))
+    ocupacao_media_lib.append(utils.topology_std_desviation(g2))
 
+fig = plt.figure(1, figsize=(9, 6))
 
-ocupacao_media = [i['media'] for i in db['media_ocupacao_sem_cultural'].all()]
-# ocupacao_media_cultural = [i['media'] for i in db['media_ocupacao'].all()]
+ax = fig.add_subplot(111)
 
-fig, ax = plt.subplots()
-plt.boxplot(ocupacao_media)
+bp = ax.boxplot([ocupacao_media, ocupacao_media_lib])
+
 plt.title('Ocupação Média')
+
 plt.ylabel('Valores em Gbps')
-ax.set_xticklabels(['Ocupação Média', 'Ocupação Média Cultural'])
+
+ax.set_xticklabels(['Ocupação Média Genética', 'Ocupação Média'])
+
 plt.show()
+
 plt.close()
+
+# Plotar Topologia
+# pos = nx.spring_layout(g, dim=2)
+# nx.draw_networkx_nodes(
+#     g, pos, nodelist=nx.nodes(g), node_color='r', node_size=350, alpha=0.8
+# )
+
+# #Definir largura do edge(futuro)
+# edgebandwith = [c['LinkSpeed'] for (a, b, c) in g.edges(data=True)]
+# lambda_color = lambda usage: ((usage > 0.6) and 'r') or 'b'
+# colors = [lambda_color(c['LinkSpeedUsed']) for (a, b, c) in g.edges(data=True)]
+# nx.draw_networkx_edges(
+#     g, pos, edgelist=nx.edges(g), width=1,
+#     alpha=1.0, edge_color=colors, style='solid', arrows=False
+# )
+# nx.draw_networkx_labels(g, pos)
+# nx.draw(g,pos)
+# plt.title('Topologia Completa')
+# plt.show()
