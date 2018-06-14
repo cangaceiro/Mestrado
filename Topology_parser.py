@@ -15,6 +15,10 @@ import config
 import dataset
 import utils
 
+MUTATION_TAX = 0.1
+
+global MUTATION_TAX
+
 g = nx.read_gml('Geant2012.gml')
 
 g2 = nx.read_gml('Geant2012.gml')
