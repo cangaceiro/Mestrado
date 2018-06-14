@@ -16,6 +16,8 @@ import dataset
 
 g = nx.read_gml('Geant2012.gml')
 
+g2 = nx.read_gml('Geant2012.gml')
+
 dijkstra_distances = {node: {} for node in g.nodes}
 
 for i in g.nodes:
@@ -28,6 +30,10 @@ for edge in g.edges:
     g[edge[0]][edge[1]]['LinkSpeedUsed'] = 0
     g[edge[0]][edge[1]]['Information'] = 0.1
 
+for edge in g2.edges:
+    g2[edge[0]][edge[1]]['LinkSpeedUsed'] = 0
+    g2[edge[0]][edge[1]]['Information'] = 0.1
+
 db = dataset.connect('sqlite:///db.sqlite3')
 db['media_ocupacao'].delete()
 db['media_ocupacao_sem_cultural'].delete()
@@ -37,9 +43,11 @@ for i in range(config.CYCLES):
     print(demanda)
     print('----------------------------------')
     caminhos = []
+    caminhos_dijkstra = []
 
     for item in demanda:
         caminhos.append(dijkstra_distances[item[0]][item[1]])
+        caminhos_dijkstra.append(list(nx.shortest_path(g2, item[0], item[1])))
 
     todas_possibilidades = itertools.product(*caminhos)
 
@@ -54,7 +62,7 @@ for i in range(config.CYCLES):
     print('----------------------------------')
     print("POPULAR DEMANDA")
     demand_generator.populate_demand(g, cromossomo, [d[2] for d in demanda])
-    
+    demand_generator.populate_demand(g2, caminhos_dijkstra, [d[2] for d in demanda])
     #========Plotagem sem algoritmo Cultural========
     valores_ocupacao_sem_cultural = []
     paths = []
