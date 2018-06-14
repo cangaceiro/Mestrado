@@ -749,15 +749,6 @@ graph [
     LinkSpeedRaw 10000000000.0
   ]
   edge [
-    source 22
-    target 24
-    LinkLabel "Completion 2007-2008"
-    LinkSpeed "10"
-    LinkLabel "10 Gbps"
-    LinkSpeedUnits "G"
-    LinkSpeedRaw 10000000000.0
-  ]
-  edge [
     source 23
     target 24
     LinkLabel "Completion 2007-2008"

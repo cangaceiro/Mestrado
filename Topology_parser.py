@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-
+import datetime as dt
 import networkx as nx
 import matplotlib.pyplot as plt
 import pprint
@@ -16,11 +15,11 @@ from config import *
 import utils
 
 
-g = nx.read_gml('Geant2012.gml') # cultural
+g = nx.read_gml('GML_USA/AttMpls.gml') # cultural
 
-g2 = nx.read_gml('Geant2012.gml') # dijkstra
+g2 = nx.read_gml('GML_USA/AttMpls.gml') # dijkstra
 
-g3 = nx.read_gml('Geant2012.gml') # genético
+g3 = nx.read_gml('GML_USA/AttMpls.gml') # genético
 
 dijkstra_distances = {node: {} for node in g.nodes}
 
@@ -94,6 +93,10 @@ plt.ylabel('Desvio Padrão da Ocupação')
 ax.set_xticklabels(['Ocupação Cultural', 'Ocupação Genética', 'Ocupação SPF'])
 
 plt.show()
+
+filename = 'plots/{}.png'.format(dt.datetime.now().strftime('%Y-%m-%d-%H:%M'))
+
+fig.savefig(filename, dpi=fig.dpi)
 
 plt.close()
 
