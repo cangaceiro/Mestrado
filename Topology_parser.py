@@ -27,8 +27,10 @@ for i in g.nodes:
     for j in g.nodes:
         if i == j:
             continue
+        # Setando os melhores caminhos de um nó para cada nó
         dijkstra_distances[i][j] = list(nx.all_shortest_paths(g, i, j))
 
+# Inicializando Uso da Banda
 for edge in g.edges:
     g[edge[0]][edge[1]]['LinkSpeedUsed'] = 0
 
@@ -77,6 +79,33 @@ for i in range(CYCLES):
     ocupacao_media.append(utils.topology_std_desviation(g))
     ocupacao_media_lib.append(utils.topology_std_desviation(g2))
     ocupacao_media_genetico.append(utils.topology_std_desviation(g3))
+
+
+uso_genetico = []
+uso_cultural = []
+uso_spf = []
+destinos = []
+origens = []
+for edge in g.edges:
+    origens.append(edge[0])
+    destinos.append(edge[1])
+    uso_spf.append(g3[edge[0]][edge[1]]['LinkSpeedUsed'])
+    uso_cultural.append(g[edge[0]][edge[1]]['LinkSpeedUsed'])
+    uso_genetico.append(g2[edge[0]][edge[1]]['LinkSpeedUsed'])
+
+usage_df = pd.DataFrame(
+    {
+        'origem': origens,
+        'destino': destinos,
+        'SPF': uso_spf,
+        'Genético': uso_genetico,
+        'Cultural': uso_cultural,
+    }
+)
+usage_df.to_csv(
+    'dados/{}.csv'.format(dt.datetime.now().strftime('%Y-%m-%d-%H:%M')),
+    index=False
+)
 
 print("------------- GRÁFICO ------------------")
 
