@@ -6,26 +6,40 @@ from config import *
 from fitness import calc_fitness, calc_cost
 
 
-def mutation(g, chromosome, mutation_fixed=None):
+def mutation(g, chromosome, cultural=True):
     chromosome = list(chromosome)
+    fitness = [calc_cost(g, path) for path in chromosome]
     indexes = []
-    if mutation_fixed is None:
-        index_quantity = max(len(chromosome) * MUTATION_TAX, 1)
+    index_quantity = max(len(chromosome) * MUTATION_TAX, 1)
+    if cultural:
+        fitness = enumerate(fitness)
+        fitness = sorted(fitness, key=lambda i: i[1])
+        indexes = [i[0] for i in fitness[:int(index_quantity)]]
     else:
-        index_quantity = max(len(chromosome) * mutation_fixed, 1)
-    while True:
-        index = random.randint(0, len(chromosome) - 1)
-        if not index in indexes:
-            indexes.append(index)
-            index_quantity = index_quantity - 1
-        if index_quantity <= 0:
-            break
+        
+        while True:
+            index = random.randint(0, len(chromosome) - 1)
+            if not index in indexes:
+                indexes.append(index)
+                index_quantity = index_quantity - 1
+            if index_quantity <= 0:
+                break
     genes = [chromosome[i] for i in indexes]
     mutations = []
     for gene in genes:
         if len(gene) < 3:
             continue
-        mutation_node = random.choice(gene[1:len(gene) - 1])
+        if cultural:
+            edges = []
+            for i, node in enumerate(gene):
+                if (i + 1) < len(gene):
+                    edges.append((node, gene[i + 1]))
+            edge = sorted(
+                edges, key=lambda e: g[e[0]][e[1]]['LinkSpeedUsed']
+            )[-1]
+            mutation_node = edge[0]
+        else:
+            mutation_node = random.choice(gene[1:len(gene) - 1])
         mutation_node_index = gene.index(mutation_node)
         original_path = gene[mutation_node_index:]
         initial_path = gene[:mutation_node_index]

@@ -1,6 +1,7 @@
 import datetime as dt
 import networkx as nx
 import matplotlib.pyplot as plt
+import numpy as np
 import pprint
 import demand_generator # Funcao que criei para demanda
 import itertools
@@ -66,15 +67,15 @@ for i in range(CYCLES):
     result = roulletweel_selection.roullet_wheel(fitness_cromossomos)
     print('ESCOLHA')
     cromossomo_cultural = Mutation.mutation(g, result[1])
-    cromossomo_genetico = Mutation.mutation(g, result[1], mutation_fixed=0.1)
+    cromossomo_genetico = Mutation.mutation(g3, result[1], cultural=False)
     print('----------------------------------')
     print("POPULAR DEMANDA")
     demand_generator.populate_demand(g, cromossomo_cultural, [d[2] for d in demanda])
     demand_generator.populate_demand(g2, caminhos_dijkstra, [d[2] for d in demanda])
     demand_generator.populate_demand(g3, cromossomo_genetico, [d[2] for d in demanda])
 
-    if i >= 1:
-        influence_function.influence_function(g, ocupacao_media[-1])
+    # if i >= 1:
+    #     influence_function.influence_function(g, ocupacao_media[-1])
 
     ocupacao_media.append(utils.topology_std_desviation(g))
     ocupacao_media_lib.append(utils.topology_std_desviation(g2))
@@ -109,25 +110,50 @@ usage_df.to_csv(
 
 print("------------- GRÁFICO ------------------")
 
-fig = plt.figure(1, figsize=(9, 6))
+ocupacao_df = pd.DataFrame(
+    {
+        'cultural': ocupacao_media,
+        'dijkstra': ocupacao_media_lib,
+        'genetico': ocupacao_media_genetico,
+    }
+)
+ocupacao_df.to_csv(
+    'dados/{}-desvio.csv'.format(dt.datetime.now().strftime('%Y-%m-%d-%H:%M')),
+)
 
-ax = fig.add_subplot(111)
+# fig = plt.figure(1, figsize=(9, 6))
 
-bp = ax.boxplot([ocupacao_media, ocupacao_media_genetico, ocupacao_media_lib])
+# ax = fig.add_subplot(111)
 
-plt.title('Ocupação Média')
+# bp = ax.boxplot([ocupacao_media, ocupacao_media_genetico, ocupacao_media_lib])
 
-plt.ylabel('Desvio Padrão da Ocupação')
+# plt.title('Ocupação Média')
 
-ax.set_xticklabels(['Ocupação Cultural', 'Ocupação Genética', 'Ocupação SPF'])
+# plt.ylabel('Desvio Padrão da Ocupação')
 
-plt.show()
+# ax.set_xticklabels(['Ocupação Cultural', 'Ocupação Genética', 'Ocupação SPF'])
 
-filename = 'plots/{}.png'.format(dt.datetime.now().strftime('%Y-%m-%d-%H:%M'))
+# plt.show()
 
-fig.savefig(filename, dpi=fig.dpi)
+# filename = 'plots/{}.png'.format(dt.datetime.now().strftime('%Y-%m-%d-%H:%M'))
 
-plt.close()
+# fig.savefig(filename, dpi=fig.dpi)
+
+# plt.close()
+
+# X = list(range(1, CYCLES + 1))
+
+# fig = plt.figure(1, figsize=(9, 6))
+
+# ax = fig.add_subplot(111)
+
+# ax.plot(X, ocupacao_media, 'r:')
+# ax.plot(X, ocupacao_media_lib, 'b-.')
+# ax.plot(X, ocupacao_media_genetico, 'g-')
+
+# ax.legend(['Cultural', 'Networkx', 'Genético'])
+
+# plt.show()
 
 # Plotar Topologia
 # pos = nx.spring_layout(g, dim=2)
