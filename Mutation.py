@@ -6,23 +6,26 @@ from config import *
 from fitness import calc_fitness, calc_cost
 
 
-def mutation(g, chromosome, cultural=True):
+def mutation(g, chromosome, espaco_crenca=None):
+    cultural = not espaco_crenca is None
     if cultural:
         print("ALGORITMO CULTURAL")
     else:
         print("ALGORITMO GENÉTICO")
     chromosome = list(chromosome)
-    fitness = [calc_cost(g, path) for path in chromosome]
+    costs = [calc_cost(g, path) for path in chromosome]
     indexes = []
     index_quantity = max(len(chromosome) * MUTATION_TAX, 1)
     if cultural:
-        fitness = enumerate(fitness)
-        fitness = sorted(fitness, key=lambda i: i[1])[:-1]
-        indexes = [i[0] for i in fitness[:int(index_quantity) + 1]]
+        if (len(espaco_crenca) / len(g.edges)) > 0.1:
+            index_quantity = max(len(chromosome) * (MUTATION_TAX + 0.1), 1)
+        costs = enumerate(costs)
+        costs = sorted(costs, key=lambda i: i[1])[:-1]
+        indexes = [i[0] for i in costs[:int(index_quantity)]]
     else:
         indexes = [i for i in range(len(chromosome))]
         random.shuffle(indexes)
-        indexes = indexes[:int(index_quantity) + 1]
+        indexes = indexes[:int(index_quantity)]
     genes = [chromosome[i] for i in indexes]
     mutations = []
     for gene in genes:
@@ -39,6 +42,7 @@ def mutation(g, chromosome, cultural=True):
             mutation_node = edge[0]
         else:
             mutation_node = random.choice(gene[1:len(gene) - 1])
+        print(mutation_node)
         mutation_node_index = gene.index(mutation_node)
         original_path = gene[mutation_node_index:]
         initial_path = gene[:mutation_node_index]

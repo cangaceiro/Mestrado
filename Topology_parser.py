@@ -45,6 +45,7 @@ ocupacao_media = []
 ocupacao_media_lib = []
 ocupacao_media_genetico = []
 edge_usage = []
+espaco_crenca = []
 
 for i in range(CYCLES):
     demanda = demand_generator.generator(list(g.nodes))
@@ -67,8 +68,8 @@ for i in range(CYCLES):
 
     result = roulletweel_selection.roullet_wheel(fitness_cromossomos)
     print('ESCOLHA')
-    cromossomo_genetico = Mutation.mutation(g3, result[1], cultural=False)
-    cromossomo_cultural = Mutation.mutation(g, result[1])
+    cromossomo_genetico = Mutation.mutation(g3, result[1])
+    cromossomo_cultural = Mutation.mutation(g, result[1], espaco_crenca)
     print('----------------------------------')
     print("POPULAR DEMANDA")
     demand_generator.populate_demand(g, cromossomo_cultural, [d[2] for d in demanda])
@@ -86,6 +87,11 @@ for i in range(CYCLES):
             (i, edge[0], edge[1], g[edge[0]][edge[1]]['LinkSpeedUsed'],
             g2[edge[0]][edge[1]]['LinkSpeedUsed'], g3[edge[0]][edge[1]]['LinkSpeedUsed'])
         )
+        uso_edge_cultural = (
+            g[edge[0]][edge[1]]['LinkSpeedUsed'] / float(g[edge[0]][edge[1]]['LinkSpeed'])
+        )
+        if uso_edge_cultural > 0.3:
+            espaco_crenca.append((edge[0], edge[1]))
 
 
 uso_genetico = []
