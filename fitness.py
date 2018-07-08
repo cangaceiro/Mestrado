@@ -3,14 +3,14 @@ import config
 
 
 def calc_fitness(g, cromossomo):
-    fitness = 0
-    for caminho in cromossomo:
-        fitness = fitness + (1 / calc_cost(g, caminho))
-    return fitness
+    cost = 0
+    for gene in cromossomo:
+        cost =  cost + calc_cost(g, gene)
+    return 1 / cost
 
 
 def calc_cost(g, caminho):
-    cost = 1
+    cost = 0
     current = caminho[0]
     for i in range(1, len(caminho)):
         link_speed_used = g[current][caminho[i]]['LinkSpeedUsed']

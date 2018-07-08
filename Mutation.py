@@ -7,23 +7,22 @@ from fitness import calc_fitness, calc_cost
 
 
 def mutation(g, chromosome, cultural=True):
+    if cultural:
+        print("ALGORITMO CULTURAL")
+    else:
+        print("ALGORITMO GENÉTICO")
     chromosome = list(chromosome)
     fitness = [calc_cost(g, path) for path in chromosome]
     indexes = []
     index_quantity = max(len(chromosome) * MUTATION_TAX, 1)
     if cultural:
         fitness = enumerate(fitness)
-        fitness = sorted(fitness, key=lambda i: i[1])
-        indexes = [i[0] for i in fitness[:int(index_quantity)]]
+        fitness = sorted(fitness, key=lambda i: i[1])[:-1]
+        indexes = [i[0] for i in fitness[:int(index_quantity) + 1]]
     else:
-        
-        while True:
-            index = random.randint(0, len(chromosome) - 1)
-            if not index in indexes:
-                indexes.append(index)
-                index_quantity = index_quantity - 1
-            if index_quantity <= 0:
-                break
+        indexes = [i for i in range(len(chromosome))]
+        random.shuffle(indexes)
+        indexes = indexes[:int(index_quantity) + 1]
     genes = [chromosome[i] for i in indexes]
     mutations = []
     for gene in genes:

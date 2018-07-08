@@ -33,17 +33,18 @@ for i in g.nodes:
 
 # Inicializando Uso da Banda
 for edge in g.edges:
-    g[edge[0]][edge[1]]['LinkSpeedUsed'] = 0
+    g[edge[0]][edge[1]]['LinkSpeedUsed'] = 0.00001
 
 for edge in g2.edges:
-    g2[edge[0]][edge[1]]['LinkSpeedUsed'] = 0
+    g2[edge[0]][edge[1]]['LinkSpeedUsed'] = 0.00001
 
 for edge in g3.edges:
-    g3[edge[0]][edge[1]]['LinkSpeedUsed'] = 0
+    g3[edge[0]][edge[1]]['LinkSpeedUsed'] = 0.00001
 
 ocupacao_media = []
 ocupacao_media_lib = []
 ocupacao_media_genetico = []
+edge_usage = []
 
 for i in range(CYCLES):
     demanda = demand_generator.generator(list(g.nodes))
@@ -66,8 +67,8 @@ for i in range(CYCLES):
 
     result = roulletweel_selection.roullet_wheel(fitness_cromossomos)
     print('ESCOLHA')
-    cromossomo_cultural = Mutation.mutation(g, result[1])
     cromossomo_genetico = Mutation.mutation(g3, result[1], cultural=False)
+    cromossomo_cultural = Mutation.mutation(g, result[1])
     print('----------------------------------')
     print("POPULAR DEMANDA")
     demand_generator.populate_demand(g, cromossomo_cultural, [d[2] for d in demanda])
@@ -80,6 +81,11 @@ for i in range(CYCLES):
     ocupacao_media.append(utils.topology_std_desviation(g))
     ocupacao_media_lib.append(utils.topology_std_desviation(g2))
     ocupacao_media_genetico.append(utils.topology_std_desviation(g3))
+    for edge in g.edges:
+        edge_usage.append(
+            (i, edge[0], edge[1], g[edge[0]][edge[1]]['LinkSpeedUsed'],
+            g2[edge[0]][edge[1]]['LinkSpeedUsed'], g3[edge[0]][edge[1]]['LinkSpeedUsed'])
+        )
 
 
 uso_genetico = []
@@ -87,15 +93,16 @@ uso_cultural = []
 uso_spf = []
 destinos = []
 origens = []
-for edge in g.edges:
-    origens.append(edge[0])
-    destinos.append(edge[1])
-    uso_spf.append(g3[edge[0]][edge[1]]['LinkSpeedUsed'])
-    uso_cultural.append(g[edge[0]][edge[1]]['LinkSpeedUsed'])
-    uso_genetico.append(g2[edge[0]][edge[1]]['LinkSpeedUsed'])
+for usage in edge_usage:
+    origens.append(usage[1])
+    destinos.append(usage[2])
+    uso_cultural.append(usage[3])
+    uso_spf.append(usage[4])
+    uso_genetico.append(usage[5])
 
 usage_df = pd.DataFrame(
     {
+        'ciclo': [i[0] for i in edge_usage],
         'origem': origens,
         'destino': destinos,
         'SPF': uso_spf,
@@ -104,7 +111,7 @@ usage_df = pd.DataFrame(
     }
 )
 usage_df.to_csv(
-    'dados/{}.csv'.format(dt.datetime.now().strftime('%Y-%m-%d-%H:%M')),
+    'dados/{}-uso.csv'.format(dt.datetime.now().strftime('%Y-%m-%d-%H:%M')),
     index=False
 )
 
@@ -119,6 +126,7 @@ ocupacao_df = pd.DataFrame(
 )
 ocupacao_df.to_csv(
     'dados/{}-desvio.csv'.format(dt.datetime.now().strftime('%Y-%m-%d-%H:%M')),
+    index=False
 )
 
 # fig = plt.figure(1, figsize=(9, 6))
