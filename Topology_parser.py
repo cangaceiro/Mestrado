@@ -106,15 +106,12 @@ for usage in edge_usage:
     uso_spf.append(usage[4])
     uso_genetico.append(usage[5])
 
+data = [
+    [i[0] for i in edge_usage], origens, destinos, uso_spf, uso_genetico,
+    uso_cultural
+]
 usage_df = pd.DataFrame(
-    {
-        'ciclo': [i[0] for i in edge_usage],
-        'origem': origens,
-        'destino': destinos,
-        'SPF': uso_spf,
-        'Genético': uso_genetico,
-        'Cultural': uso_cultural,
-    }
+    ['ciclo', 'origem', 'destino', 'SPF', 'Genético', 'Cultural']
 )
 usage_df.to_csv(
     'dados/{}-uso.csv'.format(dt.datetime.now().strftime('%Y-%m-%d-%H:%M')),
