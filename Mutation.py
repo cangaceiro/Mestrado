@@ -17,8 +17,11 @@ def mutation(g, chromosome, espaco_crenca=None):
     indexes = []
     index_quantity = max(len(chromosome) * MUTATION_TAX, 1)
     if cultural:
-        if (len(espaco_crenca) / len(g.edges)) > 0.1:
-            index_quantity = max(len(chromosome) * (MUTATION_TAX + 0.3), 1)
+        espaco_crenca_percentual = len(espaco_crenca) / len(g.edges)
+        if espaco_crenca_percentual > 0.1:
+            index_quantity = max(
+                len(chromosome) * (MUTATION_TAX + espaco_crenca_percentual), 1
+            )
         costs = enumerate(costs)
         costs = sorted(costs, key=lambda i: i[1])[:-1]
         indexes = [i[0] for i in costs[:int(index_quantity)]]
