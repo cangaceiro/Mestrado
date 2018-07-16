@@ -63,7 +63,6 @@ for i in range(CYCLES):
         caminhos_dijkstra.append(list(nx.shortest_path(g2, item[0], item[1])))
 
     todas_possibilidades = itertools.product(*caminhos)
-
     fitness_cromossomos = []
 
     for cromossomo in todas_possibilidades:
@@ -78,7 +77,7 @@ for i in range(CYCLES):
     demand_generator.populate_demand(g, cromossomo_cultural, [d[2] for d in demanda])
     demand_generator.populate_demand(g2, caminhos_dijkstra, [d[2] for d in demanda])
     demand_generator.populate_demand(g3, cromossomo_genetico, [d[2] for d in demanda])
-    fitness_genetico.append(result[0])
+    fitness_genetico.append(fitness.calc_fitness(g3, cromossomo_genetico))
     fitness_spf.append(fitness.calc_fitness(g2, caminhos_dijkstra))
     fitness_cultural.append(fitness.calc_fitness(g, cromossomo_cultural))
     # if i >= 1:
@@ -96,7 +95,9 @@ for i in range(CYCLES):
             g[edge[0]][edge[1]]['LinkSpeedUsed'] / float(g[edge[0]][edge[1]]['LinkSpeed'])
         )
         if uso_edge_cultural > 0.3:
-            espaco_crenca.append((edge[0], edge[1]))
+            edge_str = '{}-{}'.format(edge[0], edge[1])
+            if not edge_str in espaco_crenca: 
+                espaco_crenca.append(edge_str)
 
 
 print('--------------- ESPAÇO DE CRENÇA ------------')
