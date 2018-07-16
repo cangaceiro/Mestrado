@@ -33,17 +33,20 @@ for i in g.nodes:
 
 # Inicializando Uso da Banda
 for edge in g.edges:
-    g[edge[0]][edge[1]]['LinkSpeedUsed'] = 0.00001
+    g[edge[0]][edge[1]]['LinkSpeedUsed'] = 0.001
 
 for edge in g2.edges:
-    g2[edge[0]][edge[1]]['LinkSpeedUsed'] = 0.00001
+    g2[edge[0]][edge[1]]['LinkSpeedUsed'] = 0.001
 
 for edge in g3.edges:
-    g3[edge[0]][edge[1]]['LinkSpeedUsed'] = 0.00001
+    g3[edge[0]][edge[1]]['LinkSpeedUsed'] = 0.001
 
 ocupacao_media = []
 ocupacao_media_lib = []
 ocupacao_media_genetico = []
+fitness_spf = []
+fitness_genetico = []
+fitness_cultural = []
 edge_usage = []
 espaco_crenca = []
 
@@ -75,7 +78,9 @@ for i in range(CYCLES):
     demand_generator.populate_demand(g, cromossomo_cultural, [d[2] for d in demanda])
     demand_generator.populate_demand(g2, caminhos_dijkstra, [d[2] for d in demanda])
     demand_generator.populate_demand(g3, cromossomo_genetico, [d[2] for d in demanda])
-
+    fitness_genetico.append(result[0])
+    fitness_spf.append(fitness.calc_fitness(g2, caminhos_dijkstra))
+    fitness_cultural.append(fitness.calc_fitness(g, cromossomo_cultural))
     # if i >= 1:
     #     influence_function.influence_function(g, ocupacao_media[-1])
 
@@ -94,6 +99,11 @@ for i in range(CYCLES):
             espaco_crenca.append((edge[0], edge[1]))
 
 
+print('--------------- ESPAÇO DE CRENÇA ------------')
+print('TOTAL: {}'.format(len(espaco_crenca)))
+print(espaco_crenca)
+
+
 uso_genetico = []
 uso_cultural = []
 uso_spf = []
@@ -106,19 +116,33 @@ for usage in edge_usage:
     uso_spf.append(usage[4])
     uso_genetico.append(usage[5])
 
-data = [
-    [i[0] for i in edge_usage], origens, destinos, uso_spf, uso_genetico,
-    uso_cultural
-]
+data_hora = dt.datetime.now().strftime('%Y-%m-%d-%H:%M')
+
 usage_df = pd.DataFrame(
-    ['ciclo', 'origem', 'destino', 'SPF', 'Genético', 'Cultural']
+    {
+        'ciclo': [i[0] for i in edge_usage],
+        'origem': origens,
+        'destino': destinos,
+        'SPF': uso_spf,
+        'Genético': uso_genetico,
+        'Cultural': uso_cultural,
+    }
 )
 usage_df.to_csv(
-    'dados/{}-uso.csv'.format(dt.datetime.now().strftime('%Y-%m-%d-%H:%M')),
-    index=False
+    'dados/{}-uso.csv'.format(data_hora), index=False
 )
 
-print("------------- GRÁFICO ------------------")
+
+fitness_df = pd.DataFrame(
+    {
+        'Fitness SPF': fitness_spf,
+        'Fitness Genético': fitness_genetico,
+        'Fitness Cultural': fitness_cultural,
+    }
+)
+fitness_df.to_csv(
+    'dados/{}-fitness.csv'.format(data_hora), index=False
+)
 
 ocupacao_df = pd.DataFrame(
     {
@@ -128,10 +152,10 @@ ocupacao_df = pd.DataFrame(
     }
 )
 ocupacao_df.to_csv(
-    'dados/{}-desvio.csv'.format(dt.datetime.now().strftime('%Y-%m-%d-%H:%M')),
-    index=False
+    'dados/{}-desvio.csv'.format(data_hora), index=False
 )
 
+# print("------------- GRÁFICO ------------------")
 # fig = plt.figure(1, figsize=(9, 6))
 
 # ax = fig.add_subplot(111)
