@@ -171,25 +171,6 @@ ocupacao_df.to_csv(
 )
 
 # print("------------- GRÁFICO ------------------")
-# fig = plt.figure(1, figsize=(9, 6))
-
-# ax = fig.add_subplot(111)
-
-# bp = ax.boxplot([ocupacao_media, ocupacao_media_genetico, ocupacao_media_lib])
-
-# plt.title('Ocupação Média')
-
-# plt.ylabel('Desvio Padrão da Ocupação')
-
-# ax.set_xticklabels(['Ocupação Cultural', 'Ocupação Genética', 'Ocupação SPF'])
-
-# plt.show()
-
-# filename = 'plots/{}.png'.format(dt.datetime.now().strftime('%Y-%m-%d-%H:%M'))
-
-# fig.savefig(filename, dpi=fig.dpi)
-
-# plt.close()
 
 # X = list(range(1, CYCLES + 1))
 
