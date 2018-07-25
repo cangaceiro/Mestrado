@@ -11,11 +11,11 @@ ax = fig.add_subplot(111)
 
 bp = ax.boxplot([dados['cultural'], dados['genetico'], dados['dijkstra']])
 
-plt.title('Ocupação Média')
+plt.title('load average')
 
-plt.ylabel('Desvio Padrão da Ocupação')
+plt.ylabel('standard desviation')
 
-ax.set_xticklabels(['Ocupação Cultural', 'Ocupação Genética', 'Ocupação SPF'])
+ax.set_xticklabels(['ocupation Cultural', 'Ocupation Genetic', 'Ocupation SPF'])
 
 plt.show()
 
