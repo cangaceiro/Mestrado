@@ -49,6 +49,7 @@ fitness_genetico = []
 fitness_cultural = []
 edge_usage = []
 espaco_crenca = []
+demandas = []
 
 for i in range(CYCLES):
     demanda = demand_generator.generator(list(g.nodes))
@@ -61,6 +62,8 @@ for i in range(CYCLES):
     for item in demanda:
         caminhos.append(dijkstra_distances[item[0]][item[1]])
         caminhos_dijkstra.append(list(nx.shortest_path(g2, item[0], item[1])))
+    
+    demandas.append(sum([i[2] for i in demanda]))
 
     todas_possibilidades = itertools.product(*caminhos)
     fitness_cromossomos = []
@@ -99,6 +102,19 @@ for i in range(CYCLES):
             if not edge_str in espaco_crenca: 
                 espaco_crenca.append(edge_str)
 
+data_hora = dt.datetime.now().strftime('%Y-%m-%d-%H:%M')
+
+print('--------------- SALVAMENTO DEMANDA ------------')
+demanda_df = pd.DataFrame(
+    {
+        'geracao': list(range(CYCLES)),
+        'demanda': demandas,
+    }
+)
+demanda_df.to_csv(
+    'dados/{}-demanda.csv'.format(data_hora), index=False
+)
+
 
 print('--------------- ESPAÇO DE CRENÇA ------------')
 print('TOTAL: {}'.format(len(espaco_crenca)))
@@ -116,8 +132,6 @@ for usage in edge_usage:
     uso_cultural.append(usage[3])
     uso_spf.append(usage[4])
     uso_genetico.append(usage[5])
-
-data_hora = dt.datetime.now().strftime('%Y-%m-%d-%H:%M')
 
 usage_df = pd.DataFrame(
     {
