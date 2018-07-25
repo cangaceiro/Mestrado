@@ -8,7 +8,7 @@ def generator(nodes):
         cp_nodes= list(nodes)# copiar a lista
         cp_nodes.remove(source)#Remover o source da copia da lista
         target=random.choice(cp_nodes)#escolher o target da lista sem o source
-        demand.append([source,target,random.randint(500, 800)/1000])# Gerar ocupação aleatoria e converter em GIGA
+        demand.append([source,target,random.randint(280, 450)/1000])# Gerar ocupação aleatoria e converter em GIGA
     return demand
 
 

@@ -16,11 +16,11 @@ from config import *
 import utils
 
 
-g = nx.read_gml('GML_USA/AttMpls.gml') # cultural
+g = nx.read_gml('Geant2012.gml') # cultural
 
-g2 = nx.read_gml('GML_USA/AttMpls.gml') # dijkstra
+g2 = nx.read_gml('Geant2012.gml') # dijkstra
 
-g3 = nx.read_gml('GML_USA/AttMpls.gml') # genético
+g3 = nx.read_gml('Geant2012.gml') # genético
 
 dijkstra_distances = {node: {} for node in g.nodes}
 
