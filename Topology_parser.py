@@ -169,38 +169,3 @@ ocupacao_df = pd.DataFrame(
 ocupacao_df.to_csv(
     'dados/{}-desvio.csv'.format(data_hora), index=False
 )
-
-# print("------------- GRÁFICO ------------------")
-
-# X = list(range(1, CYCLES + 1))
-
-# fig = plt.figure(1, figsize=(9, 6))
-
-# ax = fig.add_subplot(111)
-
-# ax.plot(X, ocupacao_media, 'r:')
-# ax.plot(X, ocupacao_media_lib, 'b-.')
-# ax.plot(X, ocupacao_media_genetico, 'g-')
-
-# ax.legend(['Cultural', 'Networkx', 'Genético'])
-
-# plt.show()
-
-# Plotar Topologia
-# pos = nx.spring_layout(g, dim=2)
-# nx.draw_networkx_nodes(
-#     g, pos, nodelist=nx.nodes(g), node_color='r', node_size=350, alpha=0.8
-# )
-
-# #Definir largura do edge(futuro)
-# edgebandwith = [c['LinkSpeed'] for (a, b, c) in g.edges(data=True)]
-# lambda_color = lambda usage: ((usage > 0.6) and 'r') or 'b'
-# colors = [lambda_color(c['LinkSpeedUsed']) for (a, b, c) in g.edges(data=True)]
-# nx.draw_networkx_edges(
-#     g, pos, edgelist=nx.edges(g), width=1,
-#     alpha=1.0, edge_color=colors, style='solid', arrows=False
-# )
-# nx.draw_networkx_labels(g, pos)
-# nx.draw(g,pos)
-# plt.title('Topologia Completa')
-# plt.show()
