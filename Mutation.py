@@ -18,10 +18,10 @@ def mutation(g, chromosome, espaco_crenca=None):
     index_quantity = max(len(chromosome) * MUTATION_TAX, 1)
     if cultural:
         espaco_crenca_percentual = len(espaco_crenca) / len(g.edges)
-        if espaco_crenca_percentual > 0.1:
-            index_quantity = max(
-                len(chromosome) * (MUTATION_TAX + espaco_crenca_percentual), 1
-            )
+        cultural_mutation_tax = MUTATION_TAX + (0.25 * espaco_crenca_percentual)
+        index_quantity = max(
+            len(chromosome) * cultural_mutation_tax, 1
+        )
         costs = enumerate(costs)
         costs = sorted(costs, key=lambda i: i[1])[:-1]
         indexes = [i[0] for i in costs[:int(index_quantity)]]
@@ -29,6 +29,7 @@ def mutation(g, chromosome, espaco_crenca=None):
         indexes = [i for i in range(len(chromosome))]
         random.shuffle(indexes)
         indexes = indexes[:int(index_quantity)]
+    print("Indíces das mutações:", indexes)
     genes = [chromosome[i] for i in indexes]
     mutations = []
     for gene in genes:

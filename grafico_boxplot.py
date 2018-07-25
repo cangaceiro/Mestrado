@@ -1,12 +1,13 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import datetime as dt
 
 sns.set()
 
 
 dados = pd.read_csv(
-    'dados/2018-07-24-16:53-desvio.csv'
+    'dados/2018-07-25-17:08-desvio.csv'
 )
 
 fig = plt.figure(1, figsize=(9, 6))
