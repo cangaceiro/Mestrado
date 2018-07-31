@@ -1,5 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set()
 
 dados = pd.read_csv('dados/2018-07-24-16:53-demanda.csv')
 plt.xlabel('Geração')

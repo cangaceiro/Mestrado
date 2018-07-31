@@ -1,9 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import datetime as dt
-
 sns.set()
+
 
 
 dados = pd.read_csv(
@@ -20,7 +19,7 @@ plt.title('load average')
 
 plt.ylabel('standard desviation')
 
-ax.set_xticklabels(['ocupation Cultural', 'Ocupation Genetic', 'Ocupation SPF'])
+ax.set_xticklabels(['Ocupation Cultural', 'Ocupation Genetic', 'Ocupation SPF'])
 
 plt.show()
 
