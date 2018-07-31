@@ -7,7 +7,7 @@ sns.set()
 
 
 dados = pd.read_csv(
-    'dados/2018-07-25-17:08-desvio.csv'
+    'dados/2018-07-30-21:06-desvio.csv'
 )
 
 fig = plt.figure(1, figsize=(9, 6))

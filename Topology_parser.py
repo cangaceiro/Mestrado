@@ -16,11 +16,11 @@ from config import *
 import utils
 
 
-g = nx.read_gml('Geant2012.gml') # cultural
+g = nx.read_gml('GML_USA/AttMpls.gml') # cultural
 
-g2 = nx.read_gml('Geant2012.gml') # dijkstra
+g2 = nx.read_gml('GML_USA/AttMpls.gml') # dijkstra
 
-g3 = nx.read_gml('Geant2012.gml') # genético
+g3 = nx.read_gml('GML_USA/AttMpls.gml') # genético
 
 dijkstra_distances = {node: {} for node in g.nodes}
 
@@ -101,6 +101,12 @@ for i in range(CYCLES):
             edge_str = '{}-{}'.format(edge[0], edge[1])
             if not edge_str in espaco_crenca: 
                 espaco_crenca.append(edge_str)
+    espaco_crenca = utils.rank_espaco_crenca(espaco_crenca, g)
+    if len(espaco_crenca):
+        print("Edge mais usado:", espaco_crenca[0])
+    # if i == 29:
+    #     import ipdb; ipdb.set_trace()
+    
 
 data_hora = dt.datetime.now().strftime('%Y-%m-%d-%H:%M')
 
@@ -134,14 +140,7 @@ for usage in edge_usage:
     uso_genetico.append(usage[5])
 
 usage_df = pd.DataFrame(
-    {
-        'ciclo': [i[0] for i in edge_usage],
-        'origem': origens,
-        'destino': destinos,
-        'SPF': uso_spf,
-        'Genético': uso_genetico,
-        'Cultural': uso_cultural,
-    }
+    edge_usage, columns=['ciclo', 'origem', 'destino', 'Cultural', 'SPF', 'Genético']
 )
 usage_df.to_csv(
     'dados/{}-uso.csv'.format(data_hora), index=False
